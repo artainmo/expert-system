@@ -14,4 +14,6 @@ Propositional calculus is simply the formal basis of logic dealing with the noti
 [Lecture 12: Rule-based and Other Expert Systems](https://www.youtube.com/watch?v=GXLURYcP33k)<br>
 [3. Reasoning: Goal Trees and Rule-Based Expert Systems](https://www.youtube.com/watch?v=leXa7EKUPFk)<br>
 [Propositional Calculus](https://mathworld.wolfram.com/PropositionalCalculus.html)<br>
-[Propositional logic in Artificial intelligence](https://www.javatpoint.com/propositional-logic-in-artificial-intelligence)
+[Propositional logic in Artificial intelligence](https://www.javatpoint.com/propositional-logic-in-artificial-intelligence)<br>
+[Expert Systems](https://www.geeksforgeeks.org/expert-systems/)<br>
+[An Introduction to Expert System Shells](https://medium.com/nerd-for-tech/an-introduction-to-expert-system-shells-530043914ec0)<br>
