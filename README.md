@@ -5,6 +5,15 @@ Write an expert-system in propositional calculus (aka propositional logic).<br>
 An expert-system is a type of AI program that can reason on a set of rules and initial facts to deduce other facts. It at least consists of a UI, inference engine and knowledge base. The knowledge base consists of facts and rules, added by an expert, forming the knowledge of the system. While the inference engine is the algorithm that uses those rules to deduce answers to questions received from the UI. Those rules and deductions are often described using _if-then_ statements.<br>
 Propositional calculus is simply the formal basis of logic dealing with the notion and usage of words such as "NOT," "OR," "AND," and "implies". The expert-system uses this convention for its rules and inferences.
 
+Inference engines can use two strategies, namely forward- and backward-chaining.<br>
+With forward-chaining we first look at the underlying facts and rules to deduce the outcome. While with backward-chaining we first look at the outcome and its rules to deduce the underlying facts.<br>
+In this project we have to implement backward-chaining. Here is an example of how it works.
+```
+Outcome (given as input): He is sweating.
+Associated rule (found in knowledge base): If he is running, he sweats.
+Underlying fact (deducted by inference engine): He is running.
+```
+
 ### Use
 
 ## Documentation
