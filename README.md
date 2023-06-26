@@ -17,3 +17,5 @@ Propositional calculus is simply the formal basis of logic dealing with the noti
 [javapoint - Propositional logic in Artificial intelligence](https://www.javatpoint.com/propositional-logic-in-artificial-intelligence)<br>
 [geeksforgeeks - Expert Systems](https://www.geeksforgeeks.org/expert-systems/)<br>
 [medium - An Introduction to Expert System Shells](https://medium.com/nerd-for-tech/an-introduction-to-expert-system-shells-530043914ec0)<br>
+[geeksforgeeks - Difference between Backward and Forward Chaining.](https://www.geeksforgeeks.org/difference-between-backward-and-forward-chaining/)<br>
+[youtube - backward chaining example | Artificial intelligence | Lec-40 | Bhanu Priya](https://www.youtube.com/watch?v=6DU42so8k48)
