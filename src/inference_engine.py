@@ -66,15 +66,15 @@ def clean_exclamations(results):
 
 def solve_connectives(results, priority=None, reasoning=None, depth=None, kb=None, record=False):
     if priority == None:
-        if "+" in results:
+        if "+" in results[:results.index("=>")+1]:
             solve_connectives(results, "+")
             if record:
                 reasoning.append((depth, "After removing +: %s." % kb.rule_to_string(results)))
-        if "|" in results:
+        if "|" in results[:results.index("=>")+1]:
             solve_connectives(results, "|")
             if record:
                 reasoning.append((depth, "After removing |: %s." % kb.rule_to_string(results)))
-        if "^" in results:
+        if "^" in results[:results.index("=>")+1]:
             solve_connectives(results, "^")
             if record:
                 reasoning.append((depth, "After removing ^: %s." % kb.rule_to_string(results)))
@@ -100,11 +100,11 @@ def solve_connectives(results, priority=None, reasoning=None, depth=None, kb=Non
         i += 1
 
 def deduce(rule, reasoning, depth, kb):
-    if "!" in rule:
+    if "!" in rule[:rule.index("=>")+1]:
         clean_exclamations(rule)
         reasoning.append((depth, "After removing !: %s." % kb.rule_to_string(rule)))
-    while ("(" in rule) or (")" in rule):
-        if ("(" in rule) ^ (")" in rule):
+    while ("(" in rule[:rule.index("=>")+1]) or (")" in rule[:rule.index("=>")+1]):
+        if ("(" in rule[:rule.index("=>")+1]) ^ (")" in rule[:rule.index("=>")+1]):
             print("expert-system: Error: Rule with non-closed paranthese.")
             exit(1)
         paranthese = rule[rule.index("(")+1:rule.index(")")]
