@@ -1,0 +1,7 @@
+F + B => Z        # F and B implies Z
+C + D => F        # C and B implies F
+A     => D        # A implies D
+
+=EBC             # Initial facts : A, E, B and C are true. All others are false.
+
+?Z                # Queries: Is Z true or false?
