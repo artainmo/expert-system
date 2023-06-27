@@ -1,0 +1,8 @@
+# test OR in conclusion
+
+A => B | C
+D => B
+
+=D
+
+?B

@@ -1,0 +1,7 @@
+# test ! in conclusion
+
+A + B => !C
+
+=B
+
+?C

@@ -1,0 +1,7 @@
+# test XOR in conclusion
+
+A => B ^ C
+
+=A
+
+?B

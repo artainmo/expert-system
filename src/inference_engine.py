@@ -10,14 +10,6 @@ def add_db(kb, final, find):
         exit(1)
     return final
 
-def already_visited(rule, visited):
-    for part in rule:
-        if part == "=>":
-            break
-        if part in visited:
-            return True
-    return False
-
 def connective_result(leftPart, connective, rightPart):
         if (not isinstance(leftPart, bool) and leftPart != None) \
                     or (not isinstance(rightPart, bool) and rightPart != None):
@@ -114,12 +106,11 @@ def deduce(rule, reasoning, depth, kb):
         reasoning.append((depth, "After removing (): %s." % kb.rule_to_string(rule)))
     solve_connectives(rule, None, reasoning, depth, kb, True)
 
-def find_value(kb, find, reasoning, depth, visited, debug): #Uses depth first search (https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/)
+def find_value(kb, find, reasoning, depth, debug): #Uses depth first search (https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/)
     if debug:
         if input("You are searching %s at a depth of %d. Do you want to continue (y/n)? " % (find, depth)) == "n":
             print_reasoning(reasoning)
             exit(1)
-    visited.append(find)
     reasoning.append((depth, "Find value of %s." % find))
     if kb.part_of_facts(find):
         reasoning.append((depth, "%s is part of initial facts." % find))
@@ -138,13 +129,11 @@ def find_value(kb, find, reasoning, depth, visited, debug): #Uses depth first se
     results = list()
     final = False
     for rule in kb.associated_rules(find):
-        if already_visited(rule, visited):
-            pass
         reasoning.append((depth, "%s has associated rule: %s." % (find, kb.rule_to_string(rule))))
         results.clear()
         for i in range(len(rule)):
             if not is_connective(rule[i]) and i < rule.index("=>"):
-                results.append(find_value(kb, rule[i], reasoning, depth + 1, visited, debug))
+                results.append(find_value(kb, rule[i], reasoning, depth + 1, debug))
                 if not isinstance(results[i], bool) and results[i] != None:
                     print_reasoning(reasoning)
                     print(rule)
@@ -193,13 +182,17 @@ def print_reasoning(reasoning):
 
 def search_answer(kb, show_reasoning, debug):
     reasoning = list()
-    visited = list()
     for query in kb.iterate_queries():
         reasoning.clear()
-        visited.clear()
-        answer = find_value(kb, query, reasoning, 0, visited, debug)
-        reasoning.append((0, "For query %s the final answer is: %s\n" % (query, answer)))
-        if show_reasoning:
-            print_reasoning(reasoning)
+        try:
+            answer = find_value(kb, query, reasoning, 0, debug)
+        except RecursionError:
+            if show_reasoning:
+                print("An infinite recursion error occured probably because of invalid rules. Use -d to debug.")
+            print("For query %s the final answer is: %s\n" % (query, str(None)))
         else:
-            print(reasoning[-1][1])
+            reasoning.append((0, "For query %s the final answer is: %s\n" % (query, answer)))
+            if show_reasoning:
+                print_reasoning(reasoning)
+            else:
+                print(reasoning[-1][1])
