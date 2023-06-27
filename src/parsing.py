@@ -5,7 +5,7 @@ class KnowledgeBase:
         self.queries = list()
 
     def __str__(self):
-        ret = "KnowledgeBase:\n\nrules:\n "
+        ret = "\033[96mKnowledgeBase:\033[0m\nrules:\n "
         for rule in self.rules:
             for part in rule:
                 ret += part + " "
@@ -47,6 +47,24 @@ class KnowledgeBase:
     def iterate_queries(self):
         for query in self.queries:
             yield query
+
+    def rule_to_string(self, rule):
+        res = str()
+        for i in range(len(rule)):
+            res += rule[i]
+            if i != len(rule) - 1:
+                res += " "
+        return res
+
+    def rule_to_string_with_answers(self, rule, results):
+        res = str()
+        for i, part in enumerate(rule):
+            if i < len(results) and \
+                        (isinstance(results[i], bool) or results[i] == None):
+                res += part + "(" + str(results[i]) + ") "
+            else:
+                res += part + " "
+        return res
 
     def add_rule(self, rule:str):
         new = list()

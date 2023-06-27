@@ -28,17 +28,24 @@ def is_connective(word):
     else:
         return False
 
-def find_value(kb, find):
+def find_value(kb, find, reasoning, depth):
+    reasoning.append((depth, "Find value of %s." % find))
     if kb.part_of_facts(find):
+        reasoning.append((depth, "%s is part of initial facts." % find))
         return True
+    else:
+        reasoning.append((depth, "%s is not part of initial facts." % find))
     results = list()
     for rule in kb.associated_rules(find):
+        reasoning.append((depth, "%s has associated rule: %s." % (find, kb.rule_to_string(rule))))
         for i in range(len(rule)):
             if not is_connective(rule[i]) and rule[i] != find:
-                results.append(find_value(kb, rule[i]))
+                results.append(find_value(kb, rule[i], reasoning, depth + 1))
                 if not isinstance(results[i], bool) and results[i] != None:
                     print("expert-system: Error: Value found is not Bool or None.")
-                print(rule[i] + " " + str(results[i]))
+                reasoning.append((depth, "Now we know %s is %s. ( %s)" \
+                            % (rule[i], results[i], \
+                            kb.rule_to_string_with_answers(rule, results))))
             else:
                 results.append(rule[i])
         i = 0
@@ -61,17 +68,28 @@ def find_value(kb, find):
             i += 1
         if not isinstance(results[0], bool) and results[0] != None:
             print("expert-system: Error: End result of a value is not Bool or None.")
+            exit(1)
         elif len(results) < 3:
             print("expert-system: Error: Rule end result should consist of at least 3 parts.")
+            exit(1)
         elif "|" in results:
             return None
         elif "!" in results:
             return None if result[0] is None else not results[0]
         else:
             return results[0]
+    reasoning.append((depth, "%s is not part of initial facts nor can its value be deduced from rules." % find))
     return False
 
-def search_answer(kb):
+def search_answer(kb, show_reasoning):
+    reasoning = list()
     for query in kb.iterate_queries():
-        answer = find_value(kb, query)
-        print(query + " = " + str(answer))
+        answer = find_value(kb, query, reasoning, 0)
+        reasoning.append((0, "For query %s the final answer is: %s\n" % (query, answer)))
+        if show_reasoning:
+            for part in reasoning:
+                for _ in range(part[0]):
+                    print(" ", end="")
+                print(part[1])
+        else:
+            print(reasoning[-1][1])
