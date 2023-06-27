@@ -50,6 +50,7 @@ class KnowledgeBase:
 
     def add_rule(self, rule:str):
         new = list()
+        if_and_only_if = 0
         i = 0
         length = len(rule)
         while i < length:
@@ -58,7 +59,8 @@ class KnowledgeBase:
             elif rule[i].isspace():
                 i += 1
             elif rule[i:i+3] == "<=>" or rule[i:i+3] == "<->":
-                new.append("<=>")
+                new.append("=>")
+                if_and_only_if = 1
                 i += 3
             elif rule[i:i+2] == "=>" or rule[i:i+2] == "->":
                 new.append("=>")
@@ -67,6 +69,8 @@ class KnowledgeBase:
                 new.append(rule[i])
                 i += 1
         self.rules.append(new)
+        if if_and_only_if:
+            self.rules.append(new[:new.index("=>")].extend(new[new.index("=>"):]))
 
     def associated_rules(self, outcome:str):
         for rule in self.rules:
