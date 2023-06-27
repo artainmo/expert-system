@@ -3,6 +3,9 @@ class KnowledgeBase:
         self.facts = list()
         self.rules = list()
         self.queries = list()
+        self.deduced_facts = list()
+        self.deduced_inverse_facts = list()
+        self.deduced_undetermined_facts = list()
 
     def __str__(self):
         ret = "\033[96mKnowledgeBase:\033[0m\nrules:\n "
@@ -28,8 +31,26 @@ class KnowledgeBase:
     def add_fact(self, fact:str):
         self.facts.append(fact)
 
+    def add_deduced_fact(self, fact:str):
+        self.deduced_facts.append(fact)
+
+    def add_deduced_inverse_fact(self, inverse_fact:str):
+        self.deduced_inverse_facts.append(inverse_fact)
+
+    def add_deduced_undetermined_fact(self, undetermined_fact:str):
+        self.deduced_undetermined_facts.append(undetermined_fact)
+
     def part_of_facts(self, fact:str):
         return fact in self.facts
+
+    def part_of_deduced_facts(self, fact:str):
+        return fact in self.deduced_facts
+
+    def part_of_deduced_inverse_facts(self, inverse_fact:str):
+        return inverse_fact in self.deduced_inverse_facts
+
+    def part_of_deduced_undetermined_facts(self, undetermined_fact):
+        return undetermined_fact in self.deduced_undetermined_facts
 
     def iterate_facts(self):
         for fact in self.facts:
@@ -76,11 +97,11 @@ class KnowledgeBase:
                 break
             elif rule[i].isspace():
                 i += 1
-            elif rule[i:i+3] == "<=>" or rule[i:i+3] == "<->":
+            elif rule[i:i+3] == "<=>":
                 new.append("=>")
                 if_and_only_if = 1
                 i += 3
-            elif rule[i:i+2] == "=>" or rule[i:i+2] == "->":
+            elif rule[i:i+2] == "=>":
                 new.append("=>")
                 i += 2
             else:
@@ -88,7 +109,10 @@ class KnowledgeBase:
                 i += 1
         self.rules.append(new)
         if if_and_only_if:
-            self.rules.append(new[:new.index("=>")].extend(new[new.index("=>"):]))
+            firstPart = new[:new.index("=>")]
+            secondPart = new[new.index("=>") + 1:]
+            secondPart.append("=>")
+            self.rules.append(secondPart + firstPart)
 
     def associated_rules(self, outcome:str):
         for rule in self.rules:
