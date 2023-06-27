@@ -1,0 +1,10 @@
+# test OR
+
+B + C => A
+D | E => B
+B => C
+
+=DE
+?A
+
+# A should be true

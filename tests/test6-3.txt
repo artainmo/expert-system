@@ -1,0 +1,9 @@
+# test parenthesised expressions
+
+A | B + C => E
+(F | G) + H => E
+
+=C
+?E
+
+# E should be false

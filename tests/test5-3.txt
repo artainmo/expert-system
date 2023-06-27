@@ -1,0 +1,9 @@
+# test multiple same conclusion
+
+B => A
+C => A
+
+=BC
+?A
+
+# A should be true

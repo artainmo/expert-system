@@ -1,0 +1,8 @@
+# test NEGATION
+
+B + !C => A
+
+=C
+?A
+
+# A should be false

@@ -1,0 +1,10 @@
+# test XOR
+
+B + C => A
+D ^ E => B
+B => C
+
+=D
+?A
+
+# A should be True
