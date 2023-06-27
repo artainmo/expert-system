@@ -8,7 +8,7 @@ if __name__ == "__main__":
         print("expert-system: Error: Wrong number of program arguments. Program takes one file as input that can be preceded by a flag.")
         sys.exit(1)
     if not os.path.isfile(sys.argv[1 if len(sys.argv) == 2 else 2]):
-        print("expert-system: Error: '%s' is not an existing file." % sys.argv[1])
+        print("expert-system: Error: '%s' is not an existing file." % sys.argv[1 if len(sys.argv) == 2 else 2])
         sys.exit(1)
     show_reasoning = False
     debug = False

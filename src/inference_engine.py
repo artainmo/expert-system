@@ -44,7 +44,8 @@ def connective_result(leftPart, connective, rightPart):
             exit(1)
 
 def is_connective(word):
-    if (word == "+" or word == "|" or word == "^" or word == "!" or word == "=>"):
+    if (word == "+" or word == "|" or word == "^" or word == "!" \
+                or word == "=>" or word == "(" or word ==")"):
         return True
     else:
         return False
@@ -63,16 +64,33 @@ def clean_exclamations(results):
             del results[i]
         i += 1
 
-def solve_connectives(results):
+def solve_connectives(results, priority=None, reasoning=None, depth=None, kb=None, record=False):
+    if priority == None:
+        if "+" in results:
+            solve_connectives(results, "+")
+            if record:
+                reasoning.append((depth, "After removing +: %s." % kb.rule_to_string(results)))
+        if "|" in results:
+            solve_connectives(results, "|")
+            if record:
+                reasoning.append((depth, "After removing |: %s." % kb.rule_to_string(results)))
+        if "^" in results:
+            solve_connectives(results, "^")
+            if record:
+                reasoning.append((depth, "After removing ^: %s." % kb.rule_to_string(results)))
+        return
     i = 0
     while i < len(results):
         if is_connective(results[i]):
             if results[i] == "=>":
                 break
             elif results[i] == "!":
-                print("expert-system: Error: ! should have been cleaned while solving connectives.")
+                print("expert-system: Error: ! should have been cleaned.")
                 exit(1)
-            else:
+            elif results[i] == "(" or results[i] == ")":
+                print("expert-system: Error: Parantheses should have been cleaned.")
+                exit(1)
+            elif results[i] == priority:
                 if i + 1 >= len(results) or i - 1 < 0:
                     print("expert-system: Error: Rule uses connective without following or preceding value.")
                     exit(1)
@@ -81,10 +99,20 @@ def solve_connectives(results):
                 i -= 1
         i += 1
 
-def deduce(rule):
-    clean_exclamations(rule)
-    #TODO: Handle parantheses
-    solve_connectives(rule)
+def deduce(rule, reasoning, depth, kb):
+    if "!" in rule:
+        clean_exclamations(rule)
+        reasoning.append((depth, "After removing !: %s." % kb.rule_to_string(rule)))
+    while ("(" in rule) or (")" in rule):
+        if ("(" in rule) ^ (")" in rule):
+            print("expert-system: Error: Rule with non-closed paranthese.")
+            exit(1)
+        paranthese = rule[rule.index("(")+1:rule.index(")")]
+        solve_connectives(paranthese)
+        rule.insert(rule.index("("), paranthese[0])
+        del rule[rule.index("("):rule.index(")")+1]
+        reasoning.append((depth, "After removing (): %s." % kb.rule_to_string(rule)))
+    solve_connectives(rule, None, reasoning, depth, kb, True)
 
 def find_value(kb, find, reasoning, depth, visited, debug): #Uses depth first search (https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/)
     if debug:
@@ -128,7 +156,7 @@ def find_value(kb, find, reasoning, depth, visited, debug): #Uses depth first se
                             kb.rule_to_string_with_answers(rule, results))))
             else:
                 results.append(rule[i])
-        deduce(results)
+        deduce(results, reasoning, depth, kb)
         if not isinstance(results[0], bool) and results[0] != None:
             print("expert-system: Error: End result of a value is not Bool or None.")
             exit(1)
@@ -139,10 +167,22 @@ def find_value(kb, find, reasoning, depth, visited, debug): #Uses depth first se
             reasoning.append((depth, "Rule '%s' gives %s an undetermined value (None)." % (kb.rule_to_string(rule), find)))
             final = None
         elif "!" in results:
-            return add_db(kb, None if results[0] is None else not results[0], find)
+            res = None if results[0] is None else not results[0]
+            if res == True:
+                return add_db(kb, True, find)
+            else:
+                reasoning.append((depth, "Rule '%s' gives %s the value %s." % (kb.rule_to_string(rule), find, res)))
+                if final == None:
+                    final = res
         else:
-            return add_db(kb, results[0],  find)
-    reasoning.append((depth, "%s is not part of initial facts nor can its value be deduced from rules." % find))
+            if results[0] == True:
+                return add_db(kb, results[0],  find)
+            else:
+                reasoning.append((depth, "Rule '%s' gives %s the value %s." % (kb.rule_to_string(rule), find, results[0])))
+                if final == None:
+                    final = results[0]
+    if not results:
+        reasoning.append((depth, "%s is not part of initial facts nor can its value be deduced from rules." % find))
     return add_db(kb, final, find)
 
 def print_reasoning(reasoning):

@@ -6,4 +6,4 @@ A | B + C => E
 =AC
 ?E
 
-# E should be false
+# E should be false or no it should be true

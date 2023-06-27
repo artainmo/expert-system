@@ -72,7 +72,7 @@ class KnowledgeBase:
     def rule_to_string(self, rule):
         res = str()
         for i in range(len(rule)):
-            res += rule[i]
+            res += str(rule[i])
             if i != len(rule) - 1:
                 res += " "
         return res
