@@ -48,6 +48,14 @@ For this input file the backward-chaining algorithm would work like this:
     * Now we know B is true because it is part of initial facts.
   * Now we know Z is true. (F(true) + B(true) -> Z)
 
+## Use
+```
+python3.7 expert-system.py <flags(optional)> <input file>
+python3.7 expert-system.py tests/simple1.txt
+python3.7 expert-system.py -v tests/complex.txt # verbose, see explanations
+python3.7 expert-system.py -d tests/simple2.txt # debug, stop algo at specific point
+```
+
 ## Documentation
 [youtube - Lecture 11: Rules and Introduction to Expert Systems](https://www.youtube.com/watch?v=BXHcPESoaPY)<br>
 [youtube - Introduction to Expert Systems](https://www.youtube.com/watch?v=Z-HdPw9fpqI)<br>

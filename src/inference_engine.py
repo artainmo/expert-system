@@ -58,6 +58,8 @@ def clean_exclamations(results):
 
 def solve_connectives(results, priority=None, reasoning=None, depth=None, kb=None, record=False):
     if priority == None:
+        if "=>" not in results:
+            results.append("=>")
         if "+" in results[:results.index("=>")+1]:
             solve_connectives(results, "+")
             if record:
