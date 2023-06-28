@@ -5,3 +5,5 @@ A     => D        # A implies D
 =EBC             # Initial facts : A, E, B and C are true. All others are false.
 
 ?Z                # Queries: Is Z true or false?
+
+# Z should be true

@@ -5,3 +5,5 @@ A + B => !C
 =B
 
 ?C
+
+# C should be true

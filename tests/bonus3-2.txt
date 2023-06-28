@@ -6,3 +6,5 @@ D => B
 =D
 
 ?B
+
+# B should be true
