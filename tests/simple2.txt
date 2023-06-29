@@ -6,4 +6,4 @@ A     => D        # A implies D
 
 ?Z                # Queries: Is Z true or false?
 
-# Z should be true
+# Z should be false
