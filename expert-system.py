@@ -18,7 +18,7 @@ if __name__ == "__main__":
         elif sys.argv[1] == "-d":
             debug = True
         else:
-            print("Unknown flag: %s. Use -v or -d." % sys.argv[1])
+            print("expert-system: Error: Unknown flag: %s. Use -v or -d." % sys.argv[1])
             exit(1)
     with open(sys.argv[1 if len(sys.argv) == 2 else 2], "r") as fd:
         knowledge_base = KnowledgeBase()
@@ -31,9 +31,17 @@ if __name__ == "__main__":
                 knowledge_base.add_facts(line)
             elif line[0] == '?':
                 knowledge_base.add_queries(line)
+            elif line[0].isspace():
+                print("expert-system: Error: Line starts with empty spaces.")
+                exit(1)
             else:
                 knowledge_base.add_rule(line)
     print("\n")
     print(knowledge_base)
+    knowledge_base.verify_queries_valid()
+    knowledge_base.verify_rules_valid()
+    if len(knowledge_base.queries) == 0:
+        print("expert-system: Error: Missing queries.")
+        exit(1)
     print("\033[96mAnswers:\033[0m")
     search_answer(knowledge_base, show_reasoning, debug)

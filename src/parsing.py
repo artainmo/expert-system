@@ -1,3 +1,5 @@
+from src.inference_engine import is_connective
+
 class KnowledgeBase:
     def __init__(self):
         self.facts = list()
@@ -27,6 +29,9 @@ class KnowledgeBase:
             facts = facts[1:]
         end = min(facts.find(" "), facts.find("#"))
         self.facts = list(facts[:end])
+        if " " in self.facts:
+            print("expert-system: Error: Facts input with unnecessary characters.")
+            exit(1)
 
     def add_fact(self, fact:str):
         self.facts.append(fact)
@@ -61,6 +66,9 @@ class KnowledgeBase:
             queries = queries[1:]
         end = min(queries.find(" "), queries.find("#"))
         self.queries = list(queries[:end])
+        if " " in self.queries:
+            print("expert-system: Error: Queries input with unnecessary characters.")
+            exit(1)
 
     def add_query(self, query:str):
         self.queries.append(query)
@@ -68,6 +76,19 @@ class KnowledgeBase:
     def iterate_queries(self):
         for query in self.queries:
             yield query
+
+    def __in_rules(self, x):
+        for rule in self.rules:
+            for part in rule:
+                if part == x:
+                    return True
+        return False
+
+    def verify_queries_valid(self):
+        for query in self.queries:
+            if query not in self.facts and not is_connective(query) and not self.__in_rules(query):
+                print("expert-system: Error: Query (%s) not to be found in facts or rules." % query)
+                exit(1)
 
     def rule_to_string(self, rule):
         res = str()
@@ -122,3 +143,26 @@ class KnowledgeBase:
                     end = 1
                 elif end and part == outcome:
                     yield rule
+
+    def verify_rules_valid(self):
+        last_connective = True
+        for rule in self.rules:
+            last_connective = True
+            for part in rule:
+                if part == ')' or part == '(' or part == "!":
+                    pass
+                elif is_connective(part):
+                    if last_connective:
+                        print("expert-system: Error: Connective at wrong place.")
+                        exit(1)
+                    else:
+                        last_connective = True
+                else:
+                    if last_connective:
+                        last_connective = False
+                    else:
+                        print("expert-system: Error: Non-Connective at wrong place.")
+                        exit(1)
+        if len(self.rules) != 0 and last_connective:
+            print("expert-system: Error: Rule cannot end with connective.")
+            exit(1)

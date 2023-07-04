@@ -1,0 +1,5 @@
+A + T => R
+
+?A
+
+#Missing facts should not be an error

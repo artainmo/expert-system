@@ -189,8 +189,7 @@ def search_answer(kb, show_reasoning, debug):
         try:
             answer = find_value(kb, query, reasoning, 0, debug)
         except RecursionError:
-            if show_reasoning:
-                print("An infinite recursion error occured probably because of invalid rules. Use -d to debug.")
+            print("expert-system: Error: An infinite recursion error occured probably because of invalid input rules. Use -d to debug.")
             print("For query %s the final answer is: %s\n" % (query, str(None)))
         else:
             reasoning.append((0, "For query %s the final answer is: %s\n" % (query, answer)))
