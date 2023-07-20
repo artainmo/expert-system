@@ -21,7 +21,7 @@ Here is an example of an input file. The input file represents the knowledge bas
 # input file created from this backward-chaining video example (https://www.youtube.com/watch?v=6DU42so8k48)
 
 F + B -> Z        # F and B implies Z
-C + D -> F        # C and B implies F
+C + D -> F        # C and D implies F
 A     -> D        # A implies D
 
 =AEBC             # Initial facts : A, E, B and C are true. All others are false.
